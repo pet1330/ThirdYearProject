@@ -1,38 +1,34 @@
-function resultanalysis = EnhancementEvaluation()
+function resultanalysis = EnhancementEvaluation_Median_Filter(currDir,ResultFolder,Imagfolder)
 %   Bashir Al-Diri, 6/2004, 1/2014
 %   Copyright (c) 2004-2014 by  Bashir Al-Diri
 %--------------------------------------------------------------------
 
-%clear all;
-clc;
-
-currDir= '/home/peter/Desktop/Experiment Image Enhancement';
-ResultFolder = 'Results';
-Imagfolder ='Dataset';
-
-resultanalysis=[];
-
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
-range = 1 : size(files,1);
+range = size(files,1);
 
-for r = range
+resultanalysis= zeros(range,5);
+
+for r = 1:range
     
     % Display image number and file
-    disp( sprintf( 'Processing Image %d: %s', r, files(r).name ) );
-    [pathstr,name,ext] = fileparts( files(r).name );
+    fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+    [~,name,~] = fileparts( files(r).name );
     
     %---------------------------------------------------------------
     %load image file
     Img = imread( fullfile(currDir,Imagfolder,'images', files(r).name ) );
+    Img = imcrop(Img,[25 40 511 511]);
     %figure; imshow(Img); hold on
     
     %Mask: 21_training_mask
     Mask = imread(fullfile(currDir,Imagfolder, 'mask', [name(1:2) '_training_mask.gif']));
+    Mask = imcrop(Mask,[25 40 511 511]);
     %%
     %load ground truth file
     GroundFile = fullfile( currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif'] );
     GTimage = imread(GroundFile);
+    GTimage = imcrop(GTimage,[25 40 511 511]);
     %Logical ground truth
     GTL= GTimage & 1;
     
@@ -40,18 +36,17 @@ for r = range
     %peter experiment here
     %Enhance image
     
-    Enh = Img(:,:,2);
+    Enh = medfilt2(Img(:,:,2));
     
     %Enhancement algorithm
-    Enhancementalg = 'Original';
+    Enhancementalg = 'Median_Filter';
     
     %%
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
     
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
-    
-    resultanalysis = [resultanalysis; PixelStats];
+    resultanalysis(r,1:5) = PixelStats;
 
 end
 % save results on ResultFolder

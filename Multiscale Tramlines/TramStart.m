@@ -1,10 +1,10 @@
 function TramStart()
 
-    ImagDir='C:\MATLAB7\work\Research\Retina\Images\Normal Resolution';
-    ImgName='I07.bmp';
+    ImagDir='/home/peter/Dropbox/Lincoln/Year 3/Final Year Project/Project/Experiment/Dataset/images';
+    ImgName='21_training.tif';
     %ImgName='section1.bmp';
 
-    tramlineFileName = fullfile(ImagDir, ImgName);
+    tramlineFileName = fullfile(ImagDir, ImgName(:,:,2));
     image = eyeread( tramlineFileName );    
     %figure; imshow(Image);
     
