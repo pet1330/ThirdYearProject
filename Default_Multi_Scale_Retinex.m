@@ -1,7 +1,11 @@
-function resultanalysis = EnhancementEvaluation_Adaptive_Histogram_Equalisation(currDir,ResultFolder,Imagfolder)
-%   Bashir Al-Diri, 6/2004, 1/2014
-%   Copyright (c) 2004-2014 by  Bashir Al-Diri
-%--------------------------------------------------------------------
+function resultanalysis = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,para1,para2)
+if nargin < 4
+    para1 = [7 15 21];
+    para2 = 1;
+end
+
+%Enhancement algorithm
+Enhancementalg = 'Multi_Scale_Retinex';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
@@ -26,7 +30,7 @@ for r = 1:range
     Mask = imcrop(Mask,[25 40 511 511]);
     %%
     %load ground truth file
-    GroundFile = fullfile( currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif'] );
+    GroundFile = fullfile(currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif']);
     GTimage = imread(GroundFile);
     GTimage = imcrop(GTimage,[25 40 511 511]);
     %Logical ground truth
@@ -35,10 +39,7 @@ for r = 1:range
     %%
     %peter experiment here
     %Enhance image
-    
-    Enh = adapthisteq(Img(:,:,2));
-    %Enhancement algorithm
-    Enhancementalg = 'Original';
+    Enh = multi_scale_retinex(Img(:,:,2),para1,para2);
     
     %%
     %extract center points
@@ -46,7 +47,7 @@ for r = 1:range
     
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
     resultanalysis(r,1:5) = PixelStats;
-
+    
 end
 % save results on ResultFolder
 ResultFile = fullfile( currDir,ResultFolder, [Enhancementalg '_PixelStats'] );

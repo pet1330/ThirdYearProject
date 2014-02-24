@@ -1,7 +1,10 @@
-function resultanalysis = EnhancementEvaluation_Adaptive_Single_Scale_Retinex(currDir,ResultFolder,Imagfolder)
-%   Bashir Al-Diri, 6/2004, 1/2014
-%   Copyright (c) 2004-2014 by  Bashir Al-Diri
-%--------------------------------------------------------------------
+function resultanalysis = Default_Median_Filtering(currDir,ResultFolder,Imagfolder,para1)
+  %if nargin < 4
+  %  para1 = [16 16];
+  %end    
+
+    %Enhancement algorithm
+    Enhancementalg = 'Median_Filtering';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
@@ -26,7 +29,7 @@ for r = 1:range
     Mask = imcrop(Mask,[25 40 511 511]);
     %%
     %load ground truth file
-    GroundFile = fullfile( currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif'] );
+    GroundFile = fullfile(currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif']);
     GTimage = imread(GroundFile);
     GTimage = imcrop(GTimage,[25 40 511 511]);
     %Logical ground truth
@@ -35,11 +38,7 @@ for r = 1:range
     %%
     %peter experiment here
     %Enhance image
-    
-    Enh = adaptive_single_scale_retinex(Img(:,:,2));
-    
-    %Enhancement algorithm
-    Enhancementalg = 'Adaptive_Single_Scale_Retinex';
+    Enh = medfilt2(Img(:,:,2), para1);
     
     %%
     %extract center points

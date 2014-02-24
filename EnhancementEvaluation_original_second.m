@@ -6,8 +6,8 @@ function resultanalysis = EnhancementEvaluation_original_second(currDir,ResultFo
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
 range = size(files,1);
-
 resultanalysis= zeros(range,1);
+
 for r = 1:range
     
     % Display image number and file
@@ -22,6 +22,7 @@ for r = 1:range
     
     %Mask: 21_training_mask
     Mask = imread(fullfile(currDir,Imagfolder, 'mask', [name(1:2) '_training_mask.gif']));
+	%crop mask
     Mask = imcrop(Mask,[25 40 511 511]);
     %%
     %load ground truth file
@@ -38,7 +39,7 @@ for r = 1:range
     Enh = Img(:,:,2);
     
     %Enhancement algorithm
-    Enhancementalg = 'Original';
+    Enhancementalg = 'Original_Second';
     
     %%
     %extract center points
@@ -177,7 +178,7 @@ responseLikelihood =  TPFP/Total;
 randomAccuracy = referenceLikelihood * responseLikelihood + (1 - referenceLikelihood) * (1 - responseLikelihood);
 kappa = (Accuracy-randomAccuracy)/(1-randomAccuracy); %(p - e) / (1 - e)
 
-Result = [noTP; noFP; noTN; noFN; TotalError; Sensitivity; Specificity; Accuracy; Precision; kappa;];
+Result = [noTP noFP noTN noFN TotalError Sensitivity Specificity Accuracy Precision kappa];
 
 %   True Positives
 %   False Positives

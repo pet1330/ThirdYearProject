@@ -1,7 +1,10 @@
-function resultanalysis = EnhancementEvaluation_Anisotropic_Smoothing(currDir,ResultFolder,Imagfolder)
-%   Bashir Al-Diri, 6/2004, 1/2014
-%   Copyright (c) 2004-2014 by  Bashir Al-Diri
-%--------------------------------------------------------------------
+function resultanalysis = Default_wiener_Filtering(currDir,ResultFolder,Imagfolder,para1)
+  if nargin < 4
+  para1 = [3 3];
+  end    
+
+    %Enhancement algorithm
+    Enhancementalg = 'Wiener_Filtering';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
@@ -26,7 +29,7 @@ for r = 1:range
     Mask = imcrop(Mask,[25 40 511 511]);
     %%
     %load ground truth file
-    GroundFile = fullfile( currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif'] );
+    GroundFile = fullfile(currDir,Imagfolder,'1st_manual', [name(1:2) '_manual1.gif']);
     GTimage = imread(GroundFile);
     GTimage = imcrop(GTimage,[25 40 511 511]);
     %Logical ground truth
@@ -35,11 +38,7 @@ for r = 1:range
     %%
     %peter experiment here
     %Enhance image
-    
-    Enh = anisotropic_smoothing(Img(:,:,2));
-    
-    %Enhancement algorithm
-    Enhancementalg = 'Anisotropic_Smoothing';
+    Enh = medfilt2(Img(:,:,2), para1);
     
     %%
     %extract center points

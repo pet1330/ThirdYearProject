@@ -277,24 +277,19 @@ for i=1:T
 end
 
 %% Produce ilumination invariant representation of input image
-R = log(X+1)-log(L_new+1);
+R = log(X+1)- log(L_new+1);
 L = log(L_new+1);
 
 %% Do some final post-procesing or not - you can comment this line out
 if normalize ~= 0
     R=normalize8(R);
-    [R, dummy] = histtruncate(R,0.2,0.2);
+    [R, ~] = histtruncate(R,0.2,0.2);
     R = normalize8(R);
     L = normalize8(L);
 end
 
-
-
-
-
-
 %% This is an auxialry function for computing the iterative convolution
-function Y=convolute(X,y,N);
+function Y=convolute(X,y,N)
 
 [a,b]=size(X);
 
@@ -309,27 +304,3 @@ for i=2:a+1
         Y(i-1,j-1)=(sum(sum(X1(i-1:i+1,j-1:j+1).*w(i-1:i+1,j-1:j+1))))/N(i-1,j-1);
     end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
