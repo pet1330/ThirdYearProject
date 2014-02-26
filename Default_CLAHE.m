@@ -1,7 +1,7 @@
 function resultanalysis = Default_CLAHE(currDir,ResultFolder,Imagfolder,TilesInput,clipInput,NBinInput,RanInput,disInput)
 
 %Enhancement algorithm
-Enhancementalg = 'Multi_Scale_Retinex';
+Enhancementalg = 'CLAHE';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );

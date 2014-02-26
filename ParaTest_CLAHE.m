@@ -109,7 +109,9 @@ for tests = 1:5
                                     NBins{2} = round(((NBins{1}-NBins{2})/2)+NBins{3});
                                     fprintf('NBins:\nMaximum Selected as best: min=%d mid=%d max=%d',tests,NBins{3},NBins{2},NBins{1})
                             end
-                            
+
+                            fprintf('Range: %d', Range{ranLoop});
+                            fprintf('Distribution: %d', Distribution{disLoop});
                             Tobreak=1;
                             break;
                         end
