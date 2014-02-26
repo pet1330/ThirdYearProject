@@ -20,6 +20,7 @@ for tests = 1:5
     allResults(:,:,6) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMax1,ParaMax2);
     
     for i = 1:6
+        best = zeroes(6);
         best(i) = nanmean(nanmean(allResults(:,:,i)));
     end
     index = find(best == max(best(:)));
