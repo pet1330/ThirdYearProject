@@ -12,7 +12,7 @@ resultanalysis= zeros(range,5);
 for r = 1:range
     
     % Display image number and file
-    fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+   % fprintf( 'Processing Image %d: %s\n', r, files(r).name );
     [~,name,~] = fileparts( files(r).name );
     
     %---------------------------------------------------------------
