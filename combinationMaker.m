@@ -1,11 +1,17 @@
 function combinationMaker
-
-fileID = fopen('COMBO.txt','w');
-v = [0,1,2,3,4,5,6,7,8,9];
+v = [0 1 2 3 4 5 6 7 8 9];
 p = perms(v);
+hist(p);
 [s,~] = size(p);
-parfor elm = 1:s
-fprintf(fileID,'%d%d%d%d%d%d%d%d%d%d\n',p(elm,:));
+fileNum=1;
+fileID = fopen(sprintf('combo/COMBO%d',fileNum),'w');
+for elm = 1:s
+    fprintf(fileID,'%d%d%d%d%d%d%d%d%d%d\n',p(elm,:));
+    if(mod(elm,60480)==0)
+        fclose(fileID);
+        fileNum = fileNum+1;
+        fileID = fopen(sprintf('combo/COMBO%d',fileNum),'w');
+    end
 end
 fclose(fileID);
 disp(s);

@@ -1,7 +1,4 @@
 function resultanalysis = EnhancementEvaluation_original(currDir,ResultFolder,Imagfolder)
-%   Bashir Al-Diri, 6/2004, 1/2014
-%   Copyright (c) 2004-2014 by  Bashir Al-Diri
-%--------------------------------------------------------------------
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
