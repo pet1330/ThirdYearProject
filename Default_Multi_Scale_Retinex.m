@@ -12,11 +12,11 @@ files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
 range = size(files,1);
 
 resultanalysis= zeros(range,5);
-
 for r = 1:range
     
     % Display image number and file
-    fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+%    fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+     fprintf('#');
     [~,name,~] = fileparts( files(r).name );
     
     %---------------------------------------------------------------
@@ -40,7 +40,7 @@ for r = 1:range
     %peter experiment here
     %Enhance image
     Enh = multi_scale_retinex(Img(:,:,2),para1,para2);
-    
+        
     %%
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
@@ -49,6 +49,7 @@ for r = 1:range
     resultanalysis(r,1:5) = PixelStats;
     
 end
+fprintf('\n');
 % save results on ResultFolder
 ResultFile = fullfile( currDir,ResultFolder, [Enhancementalg '_PixelStats'] );
 save(ResultFile,'resultanalysis');

@@ -26,7 +26,9 @@ Distribution = cell(3);
 Distribution{1} =  'uniform';
 Distribution{2} = 'rayleigh';
 Distribution{3} = 'exponential';
-
+waitbarProgress = 0;
+waitbarTotal = 1620;
+waitbar(waitbarProgress/1620,'CLAHE Progress')
 for tests = 1:5
     allResults = zeros(20,5,162);
     track = 0;
@@ -41,6 +43,8 @@ for tests = 1:5
                     for disLoop = 1:size(Distribution)
                         disInput = Distribution{disLoop};
                         track = track+1;
+                        waitbar(waitbarProgress/waitbarTotal)
+                        waitbarProgress = waitbarProgress+1;
                         allResults(:,:,track) = Default_CLAHE(currDir,ResultFolder,Imagfolder,TilesInput,clipInput,NBinInput,RanInput,disInput);
                     end
                 end
@@ -59,6 +63,8 @@ for tests = 1:5
                 for ranLoop = 1:size(Range)
                     for disLoop = 1:size(Distribution)
                         track2 = track2+1;
+                        waitbar(waitbarProgress/waitbarTotal)
+                        waitbarProgress = waitbarProgress+1;
                         if(track2==index)
                             fprintf('Iteration: %d\n',tests);
                             switch TilesLoop
