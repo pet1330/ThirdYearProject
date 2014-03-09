@@ -53,7 +53,7 @@ for tests = 1:5
     end
     best = zeros(162);
     for i = 1:162
-        best(i) = nanmean(nanmean(allResults(:,:,i)));
+        best(i) = mean(mean(allResults(:,:,i)));
     end
     index = find(best == max(best(:)));
     track2 = 0;

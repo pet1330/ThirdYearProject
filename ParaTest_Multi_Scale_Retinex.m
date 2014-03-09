@@ -8,7 +8,7 @@ ParaMin1 = 2;
 ParaMid1 = round(((ParaMax1-ParaMin1)/2)+ParaMin1);
 ParaMax2 = 1;
 ParaMin2 = 0;
-for tests = 1:50
+for tests = 1:5
     allResults(:,:,1) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMin1,ParaMin2);
     allResults(:,:,2) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMid1,ParaMin2);
     allResults(:,:,3) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMax1,ParaMin2);
@@ -16,14 +16,14 @@ for tests = 1:50
     allResults(:,:,5) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMid1,ParaMax2);
     allResults(:,:,6) = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,ParaMax1,ParaMax2);
     
-    best = zeros(6);
+    best = zeros(6,1);
     for i = 1:6
-        best(i) = nanmean(nanmean(allResults(:,:,i)));
+        best(i) = mean(allResults(:,5,i));
     end
     disp(best)
     index = find(best == max(best(:)));
     
-    switch index
+    switch index(1)
         case 1
             % paraMin Stays the same
             ParaMax1 = ParaMid1;
@@ -67,7 +67,6 @@ for tests = 1:50
             ParaMid1 = round(((ParaMax1-ParaMin1)/2)+ParaMin1);
             fprintf('ParaMax1 on iteration %d: ParaMin=%d   ParaMid=%d   ParaMax=%d\n',tests,ParaMin1,ParaMid1,ParaMax1);
             fprintf('ParaMax2 on iteration %d: ParaMax=%d\n',tests,ParaMax2);
-            
     end
 end
 

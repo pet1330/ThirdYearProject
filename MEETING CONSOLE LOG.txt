@@ -1,0 +1,66 @@
+>> currDir = pwd;
+ResultFolder = 'Results';
+Imagfolder ='Dataset';
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+###Operation terminated by user during ordfilt2 (line 80)
+
+
+In TramlineSingle (line 24)
+      stackC(:,:,i) = ordfilt2(a,3,f) - ordfilt2(a,top2-2,f2);
+
+In Default_Multi_Scale_Retinex>ExtractCPSegments (line 79)
+TLOResponse = TramlineSingle( Img, outerW, outerL, innerW, innerL );
+
+In Default_Multi_Scale_Retinex (line 46)
+    TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
+ 
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+#Operation terminated by user during ordfilt2 (line 80)
+
+
+In TramlineSingle (line 24)
+      stackC(:,:,i) = ordfilt2(a,3,f) - ordfilt2(a,top2-2,f2);
+
+In Default_Multi_Scale_Retinex>ExtractCPSegments (line 79)
+TLOResponse = TramlineSingle( Img, outerW, outerL, innerW, innerL );
+
+In Default_Multi_Scale_Retinex (line 46)
+    TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
+ 
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+#48      PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
+K>> figure; imshow(TL); hold on
+K>> figure, imshow(Enh);
+K>> figure, imshow(Img);
+K>> figure, imshow(Img(:,:,2));
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+#48      PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+#48      PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
+>> Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,2,0)
+#48      PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
+K>> figure; imshow(TL); hold on
+K>> figure; imshow(Mask);
+K>> TL = ExtractCPSegments(Enh, Mask);
+79  TLOResponse = TramlineSingle( Img, outerW, outerL, innerW, innerL );
+K>> figure; imshow(TLOResponse);
+K>> figure; imshow(TL); hold on
+K>> TL = (TLOResponse > TramThresh/2) & Mask;
+K>> figure; imshow(TL); hold on
+K>> TL = (TLOResponse > TramThresh/3) & Mask;
+K>> figure; imshow(TL); hold on
+K>> TramThresh/3
+
+ans =
+
+    0.0500
+
+K>> TramThresh/30
+
+ans =
+
+    0.0050
+
+K>> TL = (TLOResponse > TramThresh/30) & Mask;
+K>> figure; imshow(TL); hold on
+>> figure; imshow(Mask);
