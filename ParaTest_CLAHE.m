@@ -51,9 +51,9 @@ for tests = 1:5
             end
         end
     end
-    best = zeros(162);
+    best = zeros(162,1);
     for i = 1:162
-        best(i) = mean(mean(allResults(:,:,i)));
+        best(i) = mean(allResults(:,5,i));
     end
     index = find(best == max(best(:)));
     track2 = 0;

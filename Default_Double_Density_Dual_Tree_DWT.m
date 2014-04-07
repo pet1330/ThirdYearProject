@@ -4,7 +4,7 @@ function resultanalysis = Default_Double_Density_Dual_Tree_DWT(currDir,ResultFol
   end    
 
     %Enhancement algorithm
-    Enhancementalg = 'Adaptive_Single_Scale_Retinex';
+    Enhancementalg = 'Default_Double_Density_Dual_Tree';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
@@ -15,12 +15,13 @@ resultanalysis= zeros(range,5);
 for r = 1:range
     
     % Display image number and file
-    fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+    %fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+    fprintf('#');
     [~,name,~] = fileparts( files(r).name );
     
     %---------------------------------------------------------------
     %load image file
-    Img = imread( fullfile(currDir,Imagfolder,'images', files(r).name ) );
+    Img = double(imread( fullfile(currDir,Imagfolder,'images', files(r).name ) ));
     Img = imcrop(Img,[25 40 511 511]);
     %figure; imshow(Img); hold on
     
@@ -38,16 +39,22 @@ for r = 1:range
     %%
     %peter experiment here
     %Enhance image
-    Enh = double_S2D(double(Img(:,:,2)),para1);
-        
+    %greenchannel = mmnorm();
+    %figure,subplot(1,4,1), imshow(greenchannel),title('Original');
+    Enh = mmnorm(double_S2D(Img(:,:,2),para1));
+   % subplot(1,4,2), imshow(Enh),title('Enhanced');
     %%
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
+   % subplot(1,4,3), imshow(TL), title('TL');
+    %subplot(1,4,4), imshow(Mask), title('Mask');
+    %set(gcf,'units','normalized','outerposition',[0 0 1 1]);
     
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
     resultanalysis(r,1:5) = PixelStats;
 
 end
+fprintf('\n');
 % save results on ResultFolder
 ResultFile = fullfile( currDir,ResultFolder, [Enhancementalg '_PixelStats'] );
 save(ResultFile,'resultanalysis');
@@ -57,13 +64,13 @@ save(ResultFile,'resultanalysis');
 return
 %%
 %******************************************************************
-function [TL] = ExtractCPSegments(Img, Mask)
+function [TL] = ExtractCPSegments(Imgf, Mask)
 %******************************************************************
 
-RONH = size(Img,1)*9.85/100;
+RONH = size(Imgf,1)*9.85/100;
 MaxVW = ceil(RONH*22.86/100);
 
-TramThresh=0.15; %4*0.0125;  %  0.001
+TramThresh=0.05; %0.15; %4*0.0125;  %  0.001
 outerW=ceil(MaxVW/2);
 innerW=0;
 outerL=ceil(MaxVW);
@@ -74,7 +81,7 @@ innerL=outerL;
 % returning a tram-line image.
 
 % Tramline filter with given widths and length
-TLOResponse = TramlineSingle( Img, outerW, outerL, innerW, innerL );
+TLOResponse = TramlineSingle( Imgf, outerW, outerL, innerW, innerL );
 %figure; imshow(TLOResponse);
 
 %this approch give the best results when the threshold equal 0.0045

@@ -40,12 +40,12 @@ for r = 1:range
     %peter experiment here
     %Enhance image
     Enh = multi_scale_retinex(Img(:,:,2),para1,para2);
-        figure,subplot(1,2,1), imshow(Enh);
+       % figure,subplot(1,2,1), imshow(Enh);
     %%
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);   
-    subplot(1,2,2), imshow(TL);
-    set(gcf,'units','normalized','outerposition',[0 0 1 1]);
+   % subplot(1,2,2), imshow(TL);
+    %set(gcf,'units','normalized','outerposition',[0 0 1 1]);
     
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
     resultanalysis(r,1:5) = PixelStats;
@@ -67,7 +67,7 @@ function [TL] = ExtractCPSegments(Img, Mask)
 RONH = size(Img,1)*9.85/100;
 MaxVW = ceil(RONH*22.86/100);
 
-TramThresh=0.15; %4*0.0125;  %  0.001
+TramThresh=0.05; %0.15; %4*0.0125;  %  0.001
 outerW=ceil(MaxVW/2);
 innerW=0;
 outerL=ceil(MaxVW);
@@ -82,7 +82,7 @@ TLOResponse = TramlineSingle( Img, outerW, outerL, innerW, innerL );
 %figure; imshow(TLOResponse);
 
 %this approch give the best results when the threshold equal 0.0045
-TL = (TLOResponse > TramThresh/3) & Mask;
+TL = (TLOResponse > TramThresh) & Mask;
 
 clear TLOResponse
 
