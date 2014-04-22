@@ -19,7 +19,7 @@ for tests = 1:5
     disp(best)
     index = find(best == max(best(:)));
     
-    switch index(1)
+    switch index(index)
         case 1
             % paraMin Stays the same
             ParaMax = ParaMid;

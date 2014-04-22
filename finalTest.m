@@ -5,7 +5,6 @@ Imagfolder ='Dataset';
 combo = 'combo';
 fileNumbers = 60;
 
-
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
 range = size(files,1);

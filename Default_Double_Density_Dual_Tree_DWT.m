@@ -1,13 +1,13 @@
-function resultanalysis = Default_Double_Density_Dual_Tree_DWT(currDir,ResultFolder,Imagfolder,para1)
-  if nargin < 4
-    para1 = 20;
-  end    
+function resultanalysis = Default_Double_Density_Dual_Tree_DWT(currDir,ResultFolder,Imagfolder,para)
+if nargin < 4
+    para = 20;
+end
 
-    %Enhancement algorithm
-    Enhancementalg = 'Default_Double_Density_Dual_Tree';
+%Enhancement algorithm
+Enhancementalg = 'Default_Double_Density_Dual_Tree';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
-files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
+files = dir(fullfile(currDir,Imagfolder,'images', '*.tif'));
 range = size(files,1);
 
 resultanalysis= zeros(range,5);
@@ -21,7 +21,8 @@ for r = 1:range
     
     %---------------------------------------------------------------
     %load image file
-    Img = double(imread( fullfile(currDir,Imagfolder,'images', files(r).name ) ));
+    Img = imread(fullfile(currDir,Imagfolder,'images', files(r).name ));
+    Img = Img(:,:,2);
     Img = imcrop(Img,[25 40 511 511]);
     %figure; imshow(Img); hold on
     
@@ -39,20 +40,22 @@ for r = 1:range
     %%
     %peter experiment here
     %Enhance image
-    %greenchannel = mmnorm();
-    %figure,subplot(1,4,1), imshow(greenchannel),title('Original');
-    Enh = mmnorm(double_S2D(Img(:,:,2),para1));
-   % subplot(1,4,2), imshow(Enh),title('Enhanced');
-    %%
-    %extract center points
-    TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
-   % subplot(1,4,3), imshow(TL), title('TL');
-    %subplot(1,4,4), imshow(Mask), title('Mask');
-    %set(gcf,'units','normalized','outerposition',[0 0 1 1]);
+    Enh = mmnorm(double_S2D(double(Img),para));
     
+    %extract center points
+    TL = ExtractCPSegments(Enh, Mask);
+    toPrint = figure;
+    subplot(1,4,1);imshow(Img),title('Original');
+    subplot(1,4,2); imshow(Enh),title('Enhanced');
+    subplot(1,4,3); imshow(TL), title('TL');
+    subplot(1,4,4); imshow(Mask), title('Mask');
+    set(gcf,'units','normalized','outerposition',[0 0 1 1]);
+    print -djpeg100 myfile.jpg
+    close(toPrint);
+
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
     resultanalysis(r,1:5) = PixelStats;
-
+    
 end
 fprintf('\n');
 % save results on ResultFolder
@@ -70,7 +73,7 @@ function [TL] = ExtractCPSegments(Imgf, Mask)
 RONH = size(Imgf,1)*9.85/100;
 MaxVW = ceil(RONH*22.86/100);
 
-TramThresh=0.05; %0.15; %4*0.0125;  %  0.001
+TramThresh=0.00999; %0.15; %4*0.0125;  %  0.001
 outerW=ceil(MaxVW/2);
 innerW=0;
 outerL=ceil(MaxVW);
