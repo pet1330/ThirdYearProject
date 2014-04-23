@@ -1,8 +1,10 @@
-function resultanalysis = Default_Adaptive_Single_Scale_Retinex(currDir,ResultFolder,Imagfolder,para)
-
+function resultanalysis = Default_Double_Density_Dual_Tree_DWT(currDir,ResultFolder,Imagfolder,para)
+if nargin < 4
+    para = 20;
+end
 
 %Enhancement algorithm
-Enhancementalg = 'Adaptive_Single_Scale_Retinex';
+Enhancementalg = 'Default_Double_Density_Dual_Tree';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir(fullfile(currDir,Imagfolder,'images', '*.tif'));
@@ -36,8 +38,9 @@ for r = 1:range
     GTL= GTimage & 1;
     
     %%
+    %peter experiment here
     %Enhance image
-    Enh = mmnorm(adaptive_single_scale_retinex(Img,para));
+    Enh = mmnorm(double_S2D(double(Img),para));
     
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);
@@ -60,7 +63,7 @@ ResultFile = fullfile( currDir,ResultFolder, [Enhancementalg '_PixelStats'] );
 save(ResultFile,'resultanalysis');
 
 % to calculate performance over all of the images
-% mean(resultanalysis)
+%mean(resultanalysis)
 return
 %%
 %******************************************************************
