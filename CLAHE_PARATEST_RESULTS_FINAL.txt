@@ -1,0 +1,37 @@
+>> ParaTest_CLAHE
+Iteration: 1
+numTitle:  Minimum Selected as best: min=2 mid=9 max=16
+clipLimit:  Minimum Selected as best: min=0.010000 mid=0.255000 max=0.500000
+NBins:  Middle Selected as best: min=68 mid=131 max=194
+Range: full
+Distribution: rayleigh
+Iteration 1 completed
+Iteration: 2
+numTitle:  Minimum Selected as best: min=2 mid=6 max=9
+clipLimit:  Minimum Selected as best: min=0.010000 mid=0.132500 max=0.255000
+NBins:  Middle Selected as best: min=99 mid=131 max=163
+Range: full
+Distribution: rayleigh
+Iteration 2 completed
+Iteration: 3
+numTitle:  Minimum Selected as best: min=2 mid=4 max=6
+clipLimit:  Minimum Selected as best: min=0.010000 mid=0.071250 max=0.132500
+NBins:  Middle Selected as best: min=115 mid=131 max=147
+Range: full
+Distribution: rayleigh
+Iteration 3 completed
+Iteration: 4
+numTitle:  Minimum Selected as best: min=2 mid=3 max=4
+clipLimit:  Minimum Selected as best: min=0.010000 mid=0.040625 max=0.071250
+NBins:  Middle Selected as best: min=123 mid=131 max=139
+Range: full
+Distribution: rayleigh
+Iteration 4 completed
+Iteration: 5
+numTitle:  Minimum Selected as best: min=2 mid=3 max=3
+clipLimit:  Minimum Selected as best: min=0.010000 mid=0.025313 max=0.040625
+NBins:  Middle Selected as best: min=127 mid=131 max=135
+Range: full
+Distribution: rayleigh
+Iteration 5 completed
+>> 
