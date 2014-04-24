@@ -46,7 +46,7 @@ for r = 1:range
     subplot(1,4,3); imshow(TL), title('TL');
     subplot(1,4,4); imshow(Mask), title('Mask');
     set(gcf,'units','normalized','outerposition',[0 0 1 1]);
-    print -djpeg100 myfile.jpg
+    pause(0.5);
     close(toPrint);
 
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
