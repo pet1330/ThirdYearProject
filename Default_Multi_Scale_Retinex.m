@@ -1,7 +1,7 @@
-function resultanalysis = Default_CLAHE(currDir,ResultFolder,Imagfolder,TilesInput,clipInput,NBinInput,RanInput,disInput)
+function resultanalysis = Default_Multi_Scale_Retinex(currDir,ResultFolder,Imagfolder,para1,para2)
 
 %Enhancement algorithm
-Enhancementalg = 'CLAHE';
+Enhancementalg = 'Multi_Scale_Retinex';
 
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
@@ -12,14 +12,15 @@ resultanalysis= zeros(range,5);
 for r = 1:range
     
     % Display image number and file
-    % fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+	%fprintf( 'Processing Image %d: %s\n', r, files(r).name );
+     fprintf('#');
     [~,name,~] = fileparts( files(r).name );
     
     %---------------------------------------------------------------
     %load image file
     Img = imread( fullfile(currDir,Imagfolder,'images', files(r).name ) );
     Img = Img(:,:,2);
-    Img = imcrop(Img,[25 40 511 511]);
+	Img = imcrop(Img,[25 40 511 511]);
     %figure; imshow(Img); hold on
     
     %Mask: 21_training_mask
@@ -32,27 +33,27 @@ for r = 1:range
     GTimage = imcrop(GTimage,[25 40 511 511]);
     %Logical ground truth
     GTL= GTimage & 1;
+    
     %%
     %Enhance image
-    Enh = adapthisteq(Img,'NumTiles',[TilesInput TilesInput],'ClipLimit',clipInput,'NBins',NBinInput,'Range',RanInput,'Distribution',disInput);
-    
-    %%
+    Enh = multi_scale_retinex(Img,para1,para2);
+
     %extract center points
-    TL = ExtractCPSegments(Enh, Mask);   %figure; imshow(TL); hold on
-    
-    toPrint = figure;
+    TL = ExtractCPSegments(Enh, Mask);   
+        toPrint = figure;
     subplot(1,4,1);imshow(Img),title('Original');
     subplot(1,4,2); imshow(Enh),title('Enhanced');
     subplot(1,4,3); imshow(TL), title('TL');
     subplot(1,4,4); imshow(Mask), title('Mask');
     set(gcf,'units','normalized','outerposition',[0 0 1 1]);
-    pause(0.5);
+    print -djpeg100 myfile.jpg
     close(toPrint);
-    
+	
     PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
     resultanalysis(r,1:5) = PixelStats;
     
 end
+fprintf('\n');
 % save results on ResultFolder
 ResultFile = fullfile( currDir,ResultFolder, [Enhancementalg '_PixelStats'] );
 save(ResultFile,'resultanalysis');
