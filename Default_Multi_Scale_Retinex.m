@@ -36,7 +36,7 @@ for r = 1:range
     
     %%
     %Enhance image
-    Enh = multi_scale_retinex(Img,para1,para2);
+    Enh = mmnorm(multi_scale_retinex(Img,para1,para2));
 
     %extract center points
     TL = ExtractCPSegments(Enh, Mask);   
