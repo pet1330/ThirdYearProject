@@ -46,11 +46,11 @@ while ischar(tline)
                     % Adaptive Single Scale Retinex
                     Enh = mmnorm(adaptive_single_scale_retinex(Enh,15));
                 case '2'
-                    % Contrast Limiting Adaptive Histogram Equalisation 
-                   Enh = adapthisteq(Enh,'NumTiles',[3 3],'ClipLimit',0.01,'NBins',131,'Range','full','Distribution','rayleigh');
+                    % Contrast Limiting Adaptive Histogram Equalisation
+                    Enh = adapthisteq(Enh,'NumTiles',[3 3],'ClipLimit',0.01,'NBins',131,'Range','full','Distribution','rayleigh');
                 case '3'
                     % Double Density Dual Tree
-                     Enh = mmnorm(double_S2D(double(Img),2));
+                    Enh = mmnorm(double_S2D(double(Img),2));
                 case '4'
                     % Multiscale Retinex
                     Enh = multi_scale_retinex(Img,158,1);
@@ -80,20 +80,14 @@ while ischar(tline)
         close(toPrint);
         
         PixelStats = EvaluateAlongSegmentsGroundTruthFinal( TL, GTL, Mask);
-        
-        letter = ConvertToAlpphabet(position);
-        start = ((((r-1)*10)+1));
+        C = ConvertToAlphabet(position);
+        letter = sprintf('%s',C{:});
+        start = ((((r-1)*10)+2));
         finish = (((r-1)*10)+11);
         
-        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),tline,sprintf('%c%d:%c%d',letter,(start-1),letter,(start-1)));
-        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),PixelStats,sprintf('%c%d:%c%d',letter,start,letter,finish));
-        
-        
+        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),tline,sprintf('%s%d:%s%d',letter,start-1,letter,start-1));
+        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),PixelStats,sprintf('%s%d:%s%d',letter,start,letter,finish));
     end
-    % save results on ResultFolder
-    
-   % ResultFile = fullfile(currDir,ResultFolder,tline);
-   % save(ResultFile,resultanalysis);
     tline = fgetl(fid);
     position = position+1;
 end
