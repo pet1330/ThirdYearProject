@@ -3,13 +3,11 @@ currDir = pwd;
 ResultFolder = 'Results';
 imageResultFolder = 'imageResults';
 Imagfolder ='Dataset';
-
+position = 3;
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
 range = size(files,1);
-
-resultanalysis= zeros(range,5);
-fid = fopen('COMBO.perms');
+fid = fopen('COMBOFINAL');
 tline = fgetl(fid);
 %Loops entire file line by line
 while ischar(tline)
@@ -20,7 +18,6 @@ while ischar(tline)
         fprintf('%d|',r);
         [~,name,~] = fileparts( files(r).name );
         
-        %---------------------------------------------------------------
         %load image file
         Img = imread( fullfile(currDir,Imagfolder,'images', files(r).name ) );
         Img = Img(:,:,2);
@@ -37,23 +34,29 @@ while ischar(tline)
         GTimage = imcrop(GTimage,[25 40 511 511]);
         %Logical ground truth
         GTL= GTimage & 1;
-        
+        % Reset Enh to Img
+        Enh = Img;
+        %loop through enhancements
         for charLineCharacter = 1:length(tline);
             switch tline(charLineCharacter)
                 case '0'
-                    fprintf('a');
-                   %This is the nothing case
+                    %This is the nothing case in order to evaluate the
+                    %effect of no enhancement taking palce
                 case '1'
-                    fprintf('b');
-                    Enh = adaptive_single_scale_retinex(Img,15);
+                    % Adaptive Single Scale Retinex
+                    Enh = mmnorm(adaptive_single_scale_retinex(Enh,15));
                 case '2'
-                    fprintf('c');
+                    % Contrast Limiting Adaptive Histogram Equalisation 
+                   Enh = adapthisteq(Enh,'NumTiles',[3 3],'ClipLimit',0.01,'NBins',131,'Range','full','Distribution','rayleigh');
                 case '3'
-                    fprintf('d');
+                    % Double Density Dual Tree
+                     Enh = mmnorm(double_S2D(double(Img),2));
                 case '4'
-                    fprintf('e');
+                    % Multiscale Retinex
+                    Enh = multi_scale_retinex(Img,158,1);
                 case '5'
-                    fprintf('f');
+                    % Median Filtering
+                    Enh = medfilt2(Img, [2 2]);
                 otherwise
                     disp('ERROR')
             end
@@ -65,26 +68,34 @@ while ischar(tline)
         TL = ExtractCPSegments(Enh, Mask);
         
         toPrint = figure;
+        set(toPrint, 'Visible', 'off');
         subplot(2,3,1);imshow(Img),title('Original');
         subplot(2,3,2); imshow(Enh),title('Enhanced');
         subplot(2,3,3); imshow(Mask),title('Mask');
         subplot(2,3,4); imshow(originalTL), title('Non-Enhanced TL');
         subplot(2,3,5); imshow(TL), title('Enhanced TL');
         subplot(2,3,6); imshow(imabsdiff(originalTL,TL)), title('Difference');
-        
-        set(gcf,'units','normalized','outerposition',[0 0 1 1]);
         ResultImage = fullfile(currDir,ResultFolder,imageResultFolder,sprintf('%s - %d.jpg',tline,r));
-        print('-djpeg100', ResultImage);
+        saveas(toPrint,ResultImage,'jpg');
         close(toPrint);
         
-        PixelStats = EvaluateAlongSegmentsGroundTruth( TL, GTL, Mask);
-        resultanalysis(r,1:5) = PixelStats;
+        PixelStats = EvaluateAlongSegmentsGroundTruthFinal( TL, GTL, Mask);
+        
+        letter = ConvertToAlpphabet(position);
+        start = ((((r-1)*10)+1));
+        finish = (((r-1)*10)+11);
+        
+        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),tline,sprintf('%c%d:%c%d',letter,(start-1),letter,(start-1)));
+        xlswrite(fullfile(currDir,ResultFolder,'FinalResults.xlsx'),PixelStats,sprintf('%c%d:%c%d',letter,start,letter,finish));
+        
         
     end
     % save results on ResultFolder
-    ResultFile = fullfile( currDir,ResultFolder,tline);
-    save(ResultFile,'resultanalysis');
+    
+   % ResultFile = fullfile(currDir,ResultFolder,tline);
+   % save(ResultFile,resultanalysis);
     tline = fgetl(fid);
+    position = position+1;
 end
 fclose(fid);
 return
