@@ -7,7 +7,7 @@ position = 3;
 %PathName = fullfile(currDir, Imagfolder,directory,datatype);
 files = dir( fullfile(currDir,Imagfolder,'images', '*.tif') );
 range = size(files,1);
-fid = fopen('COMBOFINAL');
+fid = fopen(fullfile(currDir,'Combinations','Comp8 Combinations', '')');
 tline = fgetl(fid);
 %Loops entire file line by line
 while ischar(tline)
